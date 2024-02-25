@@ -22,15 +22,8 @@ export default class Clipboard extends React.Component<{}, ClipboardState> {
     }
 
     componentDidMount(): void {
-        GetClipboardHistory().then(clipboardData => {
-            console.log(clipboardData);
-            this.setState({ data: clipboardData });
-        });
-
-        EventsOn('clipboardUpdate', (clipboardData) => {
-            console.log(clipboardData);
-            this.setState({ data: clipboardData });
-        })
+        GetClipboardHistory().then(data =>  this.setState({ data }));
+        EventsOn('clipboardUpdate', (data) => this.setState({ data }));
     }
 
     render(): React.ReactNode {
