@@ -1,11 +1,14 @@
-# README
+# Clipboard manager (WIP)
 
 ## About
 
-This is the official Wails React-TS template.
+Application that can manager clipboard history.
+- keep a specified number of items in history
+- clear clipboard after a set time (5s default)
+- reuse previous items
+- delete items from history
+- visualize items by category
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
 
 ## Live Development
 
