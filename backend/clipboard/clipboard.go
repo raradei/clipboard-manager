@@ -55,13 +55,13 @@ func startResetTimer() *time.Timer {
 	return time.AfterFunc(time.Duration(ttlSeconds)*time.Second, func() {
 		fmt.Println("Clipboard cleared")
 
-		skipData = true
 		clipboard.Write(clipboard.FmtText, []byte(""))
 	})
 }
 
 func stopTimer(timer *time.Timer) {
-	fmt.Println("stop timer ", timer)
+	fmt.Println("Stop timer ", timer)
+
 	if timer != (*time.Timer)(nil) {
 		timer.Stop()
 	}
