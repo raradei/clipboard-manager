@@ -1,0 +1,6 @@
+#clipboard-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    padding: 8px;
+}

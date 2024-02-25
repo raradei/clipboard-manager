@@ -1,0 +1,18 @@
+.clipboard-item {
+    position: relative;
+    border: 1px solid;
+    padding: 8px;
+}
+
+.clipboard-item__value {
+    max-height: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.clipboard-item__copy-item {
+    position: absolute;
+    cursor: pointer;
+    right: 6px;
+    top: 6px
+}
