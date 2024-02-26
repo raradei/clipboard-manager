@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	clipboard "main/backend/clipboard"
+	"main/backend/clipboard"
 )
 
 type App struct {

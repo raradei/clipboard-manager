@@ -12,13 +12,11 @@ import (
 var assets embed.FS
 
 func main() {
-	// Create an instance of the app structure
 	app := NewApp()
 
-	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Clipboard manager",
-		Width:  800,
+		Width:  400,
 		Height: 600,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
