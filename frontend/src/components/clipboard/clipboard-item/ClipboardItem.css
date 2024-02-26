@@ -1,6 +1,7 @@
 .clipboard-item {
     --background: rgba(0, 0, 0, 0.140);
-   
+
+    overflow: hidden;
     position: relative;
     border: 1px solid;
     padding: 8px;
@@ -14,9 +15,8 @@
 
 .clipboard-item__copy-item {
     position: absolute;
-    cursor: pointer;
     right: 6px;
-    top: 6px
+    top: 6px;
 }
 
 @keyframes loadingEffect {

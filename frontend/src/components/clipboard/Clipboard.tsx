@@ -1,36 +1,40 @@
 import './Clipboard.css'
 
-import React from "react";
+import { useEffect, useState } from "react";
 import ClipboardItem from "./clipboard-item/ClipboardItem";
 
 import { clipboard } from "../../../wailsjs/go/models";
 import { GetClipboardHistory } from '../../../wailsjs/go/main/App';
 import { EventsOn } from "../../../wailsjs/runtime/runtime";
+import { Filter, Settings } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
+
+export default function Clipboard() {
+    const [data, setData] = useState<clipboard.StringData[]>([]);
+    const [ttl, setTTL] = useState(5);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        GetClipboardHistory().then((data) => setData(data));
+        EventsOn('clipboardUpdate', (data) => setData(data));
+    }, []);
 
 
-type ClipboardState = {
-    data: clipboard.StringData[],
-    ttl: number
-};
+    const toSettings = () => navigate('settings');
 
-export default class Clipboard extends React.Component<{}, ClipboardState> {
-    constructor(props: {}) {
-        super(props);
-        this.state = { data: [], ttl: 5 };
-    }
-
-    componentDidMount(): void {
-        GetClipboardHistory().then(data => this.setState({ data }));
-        EventsOn('clipboardUpdate', (data) => this.setState({ data }));
-    }
-
-    render(): React.ReactNode {
-        return (
-            <div id="clipboard-container">
-                {this.state.data.map(({ id, value }) => {
-                    return <ClipboardItem key={id} id={id} data={value} ttl={this.state.ttl}></ClipboardItem>;
-                })}
+    return (
+        <>
+            <div id='header'>
+                <button className='icon-btn' onClick={console.log}><Filter /></button>
+                <button className='icon-btn' onClick={toSettings}><Settings /></button>
             </div>
-        )
-    }
-}
+
+            <div id="clipboard-container">
+                {data.map(({ id, value }) => (
+                    <ClipboardItem key={id} id={id} data={value} ttl={ttl} />
+                ))}
+            </div>
+        </>
+    );
+};

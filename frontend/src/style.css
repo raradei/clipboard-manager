@@ -11,6 +11,22 @@ body {
     sans-serif;
 }
 
+.icon-btn {
+    --size: 16px;
+    background: none;
+    border: none;
+    padding: 0;
+    height: var(--size);
+    width: var(--size);
+    cursor: pointer;
+}
+
+.icon-btn >  * {
+    color: white;
+    width: 100%;
+    height: auto;
+}
+
 @font-face {
     font-family: "Nunito";
     font-style: normal;

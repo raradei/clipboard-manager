@@ -1,12 +1,8 @@
 import './ClipboardItem.css'
 
 import { EventsEmit, EventsOn } from '../../../../wailsjs/runtime/runtime'
-import React from 'react';
-
-type ClipboardItemState = {
-    activeClass: string,
-    key: number
-}
+import React, { useEffect, useRef, useState } from 'react';
+import { Copy } from 'react-feather';
 
 type ClipboardItemType = {
     id: string,
@@ -14,53 +10,49 @@ type ClipboardItemType = {
     ttl: number
 }
 
-export default class ClipboardItem extends React.Component<ClipboardItemType, ClipboardItemState> {
-    private timeoutId: number | null = null;
-    private readonly activeClassName = 'clipboard-item__active';
+export default function ClipboardItem({ id, data, ttl }: ClipboardItemType) {
+    const [activeClass, setActiveClass] = useState('');
+    const [key, setKey] = useState(0);
+    const timeoudIdRef = useRef<number | null>(null);
 
-    constructor(props: ClipboardItemType) {
-        super(props);
-        this.state = { activeClass: '', key: 0 };
-    }
+    const activeClassName = 'clipboard-item__active';
+    const msInSecond = 1000;
 
-    componentDidMount(): void {
+    useEffect(() => {
         EventsOn('selectItem', () => {
-            if (this.timeoutId) {
-                clearTimeout(this.timeoutId);
-                this.setState({ activeClass: '' });
-                this.timeoutId = null;
+            if (timeoudIdRef.current) {
+                clearTimeout(timeoudIdRef.current);
+                setActiveClass('');
+                timeoudIdRef.current = null;
             }
-        })
-    }
+        });
 
-    componentWillUnmount(): void {
-        if (this.timeoutId) clearInterval(this.timeoutId);
-    }
+        return () => {
+            if (timeoudIdRef.current) clearInterval(timeoudIdRef.current);
+        };
+    }, []);
 
-    selectItem = (_event: React.MouseEvent) => {
-        EventsEmit('selectItem', this.props.id);
+    const selectItem = (_event: React.MouseEvent) => {
+        EventsEmit('selectItem', id);
 
-        this.setState(state => ({
-            ...state,
-            activeClass: this.activeClassName,
-            key: state.key + 1
-        }))
+        setActiveClass(activeClassName);
+        setKey((prevKey) => prevKey + 1);
 
-        this.timeoutId = setTimeout(() => {
-            this.setState({ activeClass: '' });
-        }, this.props.ttl * 1000)
-    }
+        timeoudIdRef.current = setTimeout(() => {
+            setActiveClass('');
+        }, ttl * msInSecond);
+    };
 
-    render(): React.ReactNode {
-        return (
-            <div className='clipboard-item'>
-                <div key={this.state.key} className={this.state.activeClass} style={{ animationDuration: `${this.props.ttl}s` }}></div>
-                <pre className='clipboard-item__value'>{this.props.data}</pre>
+    return (
+        <div className='clipboard-item'>
+            <div key={key} className={activeClass} style={{ animationDuration: `${ttl}s` }}></div>
+            
+            <pre className='clipboard-item__value'>{data}</pre>
 
-                <button className='clipboard-item__copy-item' onClick={this.selectItem}>Copy</button>
-            </div>
-        );
-    }
-}
-
+            <button className='clipboard-item__copy-item icon-btn' onClick={selectItem}>
+                <Copy color='white' width='100%' height='auto'></Copy>
+            </button>
+        </div>
+    );
+};
 
