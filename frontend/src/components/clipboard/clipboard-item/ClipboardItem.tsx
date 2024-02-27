@@ -7,46 +7,55 @@ import { Copy } from 'react-feather';
 type ClipboardItemType = {
     id: string,
     data: string,
-    ttl: number
+    ttl: number,
+    selected: boolean
 }
 
-export default function ClipboardItem({ id, data, ttl }: ClipboardItemType) {
-    const [activeClass, setActiveClass] = useState('');
-    const [key, setKey] = useState(0);
-    const timeoudIdRef = useRef<number | null>(null);
-
+export default function ClipboardItem({ id, data, ttl, selected }: ClipboardItemType) {
     const activeClassName = 'clipboard-item__active';
     const msInSecond = 1000;
 
+    const [activeClass, setActiveClass] = useState('');
+    const [key, setKey] = useState(0);
+
+    const timeoudIdRef = useRef<number | null>(null);
+
     useEffect(() => {
-        EventsOn('selectItem', () => {
-            if (timeoudIdRef.current) {
-                clearTimeout(timeoudIdRef.current);
-                setActiveClass('');
-                timeoudIdRef.current = null;
-            }
-        });
+        if (selected) activateItem();
+
+        EventsOn('clipboardUpdate', deactivateItem)
+        EventsOn('selectItem', deactivateItem);
 
         return () => {
             if (timeoudIdRef.current) clearInterval(timeoudIdRef.current);
         };
     }, []);
 
-    const selectItem = (_event: React.MouseEvent) => {
-        EventsEmit('selectItem', id);
-
+    const activateItem = () => {
         setActiveClass(activeClassName);
-        setKey((prevKey) => prevKey + 1);
-
         timeoudIdRef.current = setTimeout(() => {
             setActiveClass('');
         }, ttl * msInSecond);
+    }
+
+    const deactivateItem = () => {
+        if (timeoudIdRef.current) {
+            clearTimeout(timeoudIdRef.current);
+            setActiveClass('');
+            timeoudIdRef.current = null;
+        }
+    }
+
+    const selectItem = (_event: React.MouseEvent) => {
+        EventsEmit('selectItem', id);
+        setKey((prevKey) => prevKey + 1);
+        activateItem()
     };
 
     return (
         <div className='clipboard-item'>
             <div key={key} className={activeClass} style={{ animationDuration: `${ttl}s` }}></div>
-            
+
             <pre className='clipboard-item__value'>{data}</pre>
 
             <button className='clipboard-item__copy-item icon-btn' onClick={selectItem}>

@@ -1,6 +1,6 @@
 import './Clipboard.css'
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ClipboardItem from "./clipboard-item/ClipboardItem";
 
 import { clipboard } from "../../../wailsjs/go/models";
@@ -14,10 +14,14 @@ export default function Clipboard() {
     const [ttl, setTTL] = useState(5);
 
     const navigate = useNavigate();
+    const lastEntryRef = useRef('');
 
     useEffect(() => {
         GetClipboardHistory().then((data) => setData(data));
-        EventsOn('clipboardUpdate', (data) => setData(data));
+        EventsOn('clipboardUpdate', (data) => {
+            setData(data);
+            lastEntryRef.current = data[0].id;
+        });
     }, []);
 
 
@@ -31,9 +35,11 @@ export default function Clipboard() {
             </div>
 
             <div id="clipboard-container">
-                {data.map(({ id, value }) => (
-                    <ClipboardItem key={id} id={id} data={value} ttl={ttl} />
-                ))}
+                {data.map(({ id, value }) => {
+                    return (
+                        <ClipboardItem key={id} id={id} data={value} ttl={ttl} selected={id == lastEntryRef.current} />
+                    )
+                })}
             </div>
         </>
     );
