@@ -1,6 +1,7 @@
 package clipboard
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -82,6 +83,10 @@ func InitWatcher(ctx context.Context) {
 	ch := clipboard.Watch(ctx, clipboard.FmtText)
 
 	for data := range ch {
+		if bytes.Equal(data, []byte{'\n'}) {
+			continue
+		}
+
 		if skipData {
 			skipData = false
 			continue
