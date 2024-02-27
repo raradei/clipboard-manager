@@ -2,8 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"main/backend/clipboard"
+	"main/backend/settings"
 )
 
 type App struct {
@@ -15,11 +16,12 @@ func NewApp() *App {
 }
 
 func (a *App) startup(ctx context.Context) {
-	fmt.Println("starting app")
+	log.Print("Starting app")
 
 	a.ctx = ctx
+	settings.InitSettings(ctx)
 	clipboard.InitListener(ctx)
-	clipboard.InitWatcher(ctx)
+	go clipboard.InitWatcher(ctx)
 }
 
 func (a *App) GetClipboardHistory() []clipboard.StringData {
