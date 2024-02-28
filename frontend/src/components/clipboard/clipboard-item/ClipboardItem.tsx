@@ -12,7 +12,7 @@ type ClipboardItemType = {
 }
 
 export default function ClipboardItem({ id, data, ttl, selected }: ClipboardItemType) {
-    const activeClassName = 'clipboard-item__active';
+    const activeClassName = 'active';
     const msInSecond = 1000;
 
     const [activeClass, setActiveClass] = useState('');
@@ -56,9 +56,9 @@ export default function ClipboardItem({ id, data, ttl, selected }: ClipboardItem
         <div className='clipboard-item'>
             <div key={key} className={activeClass} style={{ animationDuration: `${ttl}s` }}></div>
 
-            <pre className='clipboard-item__value'>{data}</pre>
+            <pre className='value'>{data}</pre>
 
-            <button className='clipboard-item__copy-item icon-btn' onClick={selectItem}>
+            <button className='icon-btn' onClick={selectItem}>
                 <Copy color='white' width='100%' height='auto'></Copy>
             </button>
         </div>

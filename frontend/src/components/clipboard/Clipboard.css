@@ -1,12 +1,40 @@
-#clipboard-container{
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
-    width: 100%;
-}
+#clipboard-container {
+    --gap: 8px;
 
-#header {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--gap);
+
+        .search-container {
+            display: flex;
+            place-items: center;
+            position: relative;
+            column-gap: var(--gap);
+
+            .search-input {
+                background: none;
+                border: none;
+                border-bottom: 1px solid white;
+                color: white;
+
+                &:focus-visible {
+                    outline: none;
+                }
+            }
+
+            .icon-btn {
+                position: absolute;
+                right: 0;
+                width: 12px;
+            }
+        }
+    }
+
+    .items-container {
+        display: flex;
+        flex-direction: column;
+        row-gap: var(--gap);
+        width: 100%;
+    }
 }

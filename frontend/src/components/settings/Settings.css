@@ -1,16 +1,36 @@
-#settings {
+#settings-container {
     display: flex;
     flex-direction: column;
-}
-
-#header {
-    display: flex;
-    justify-content: space-between;
-    place-items: center;
     padding: 8px;
-}
 
-#header h1 {
-    font-size: 16px;
-    margin: 0;
+    .header {
+        display: flex;
+        justify-content: space-between;
+        place-items: center;
+
+        & h1 {
+            font-size: 16px;
+            margin: 0;
+        }
+    }
+
+    .form {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 6px;
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+
+            & .form-input {
+                background: none;
+                border: none;
+                border-bottom: 1px solid white;
+                color: white;
+                max-width: 40px;
+            }
+        }
+    }
 }

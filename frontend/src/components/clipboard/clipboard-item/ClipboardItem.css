@@ -5,18 +5,29 @@
     position: relative;
     border: 1px solid;
     padding: 8px;
-}
 
-.clipboard-item__value {
-    max-height: 150px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
+    & .active {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--background);
+        animation-name: loadingEffect;
+        animation-timing-function: linear;
+    }
 
-.clipboard-item__copy-item {
-    position: absolute;
-    right: 6px;
-    top: 6px;
+    & .value {
+        max-height: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    & .icon-btn {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+    }
 }
 
 @keyframes loadingEffect {
@@ -27,15 +38,4 @@
     100% {
         transform: translateX(0%);
     }
-}
-
-.clipboard-item__active {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--background);
-    animation-name: loadingEffect;
-    animation-timing-function: linear;
 }
