@@ -10,9 +10,17 @@ import (
 )
 
 // TODO: get hotkey from settings
-var toggleHotkey = hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.Mod4}, hotkey.KeyV)
-var ctx context.Context
-var isHidden = false
+type position struct {
+	x int
+	y int
+}
+
+var (
+	toggleHotkey   *hotkey.Hotkey  = hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.Mod4}, hotkey.KeyV)
+	ctx            context.Context = nil
+	isHidden       bool            = false
+	windowPosition position
+)
 
 func InitSettings(context context.Context) {
 	ctx = context
@@ -36,11 +44,11 @@ func registerToggleHotkey() {
 func toggleWndow() {
 	if isHidden {
 		runtime.WindowShow(ctx)
+		runtime.WindowSetPosition(ctx, windowPosition.x, windowPosition.y)
 	} else {
+		windowPosition.x, windowPosition.y = runtime.WindowGetPosition(ctx)
 		runtime.WindowHide(ctx)
 	}
 
 	isHidden = !isHidden
-
-	log.Println("toggle window")
 }

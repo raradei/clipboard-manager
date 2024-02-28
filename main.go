@@ -16,8 +16,8 @@ func main() {
 
 	err := wails.Run(&options.App{
 		Title:            "Clipboard manager",
-		Width:            400,
-		Height:           600,
+		Width:            300,
+		Height:           500,
 		AlwaysOnTop:      true,
 		OnStartup:        app.startup,
 		DisableResize:    true,
