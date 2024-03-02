@@ -2,10 +2,13 @@ package main
 
 import (
 	"embed"
+	"log"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"golang.design/x/hotkey"
+	"golang.design/x/hotkey/mainthread"
 )
 
 //go:embed all:frontend/dist
@@ -28,6 +31,15 @@ func main() {
 		Bind: []interface{}{
 			app,
 		},
+	})
+
+	mainthread.Init(func() {
+		hk := hotkey.New([]hotkey.Modifier{hotkey.ModCtrl, hotkey.ModShift}, hotkey.KeyS)
+		err := hk.Register()
+		if err != nil {
+			log.Fatalf("hotkey: failed to register hotkey: %v", err)
+			return
+		}
 	})
 
 	if err != nil {

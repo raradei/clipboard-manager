@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"time"
@@ -15,17 +16,20 @@ import (
 	"golang.design/x/clipboard"
 )
 
-var filePath string
-var clipboardHistory ClipboardHistory
-var currentTimer *time.Timer
-var skipData bool = false
-var ttlSeconds uint8 = 5
+var (
+	filePath     string
+	currentTimer *time.Timer
+	skipData     bool = false
+	// TODO: get and update data based on settings
+	ttlSeconds       uint8 = 5
+	clipboardHistory       = NewCircularBuffer[HistoryItem](5)
+)
 
 func clipboardDataHandler(ctx context.Context, data string) bool {
-	stringObj := StringData{Id: uuid.NewString(), Value: data}
-	clipboardHistory.Data = append([]StringData{stringObj}, clipboardHistory.Data...)
+	stringObj := HistoryItem{Id: uuid.NewString(), Value: data}
+	clipboardHistory.Add(stringObj)
 
-	jsonData, err := json.MarshalIndent(clipboardHistory.Data, "", "  ")
+	jsonData, err := json.MarshalIndent(clipboardHistory.data, "", "  ")
 	if err != nil {
 		fmt.Println("Error marshalling JSON:", err)
 		return false
@@ -47,7 +51,7 @@ func clipboardDataHandler(ctx context.Context, data string) bool {
 		fmt.Println("Error closing file:", err)
 	}
 
-	runtime.EventsEmit(ctx, "clipboardUpdate", clipboardHistory.Data)
+	runtime.EventsEmit(ctx, "clipboardUpdate", clipboardHistory.data)
 
 	return true
 }
@@ -78,7 +82,7 @@ func InitWatcher(ctx context.Context) {
 
 	tempDir := os.TempDir()
 	filePath = filepath.Join(tempDir, "clipboard-history.json")
-	clipboardHistory.loadClipboardHistory(filePath)
+	clipboardHistory.LoadClipboardHistory(filePath)
 
 	ch := clipboard.Watch(ctx, clipboard.FmtText)
 
@@ -111,17 +115,19 @@ func InitListener(ctx context.Context) {
 
 		skipData = true
 		id := optionalData[0].(string)
-		selectedItem := clipboardHistory.findItem(id)
+		selectedItem := clipboardHistory.FindItem(id)
 		clipboard.Write(clipboard.FmtText, []byte(selectedItem.Value))
 
 		currentTimer = startResetTimer()
 	})
 }
 
-func GetClipboardHistory() []StringData {
-	if clipboardHistory.Data == nil {
-		return []StringData{}
+func GetClipboardHistory() []HistoryItem {
+	if clipboardHistory.data == nil {
+		return []HistoryItem{}
 	}
 
-	return clipboardHistory.Data
+	log.Println(clipboardHistory.data)
+
+	return clipboardHistory.data
 }

@@ -24,6 +24,6 @@ func (a *App) startup(ctx context.Context) {
 	go clipboard.InitWatcher(ctx)
 }
 
-func (a *App) GetClipboardHistory() []clipboard.StringData {
+func (a *App) GetClipboardHistory() []clipboard.HistoryItem {
 	return clipboard.GetClipboardHistory()
 }
