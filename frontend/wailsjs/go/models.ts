@@ -1,11 +1,11 @@
 export namespace clipboard {
 	
-	export class StringData {
+	export class HistoryItem {
 	    id: string;
 	    value: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new StringData(source);
+	        return new HistoryItem(source);
 	    }
 	
 	    constructor(source: any = {}) {

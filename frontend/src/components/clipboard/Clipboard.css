@@ -16,7 +16,7 @@
                 background: none;
                 border: none;
                 border-bottom: 1px solid white;
-                color: white;
+                color: inherit;
 
                 &:focus-visible {
                     outline: none;

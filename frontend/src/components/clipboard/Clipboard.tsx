@@ -10,7 +10,7 @@ import { Filter, Settings, X } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
 
 export default function Clipboard() {
-    const [data, setData] = useState<clipboard.StringData[]>([]);
+    const [data, setData] = useState<clipboard.HistoryItem[]>([]);
     const [ttl, setTTL] = useState(5);
     const [searchValue, setSearchValue] = useState('');
 

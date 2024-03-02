@@ -22,9 +22,9 @@ export default function Settings() {
 
     function inputChangeHandler(getStateObj: (value: number) => settingsFormState, eventName: string) {
         return ({ target: { value, min, max, maxLength } }: React.ChangeEvent<HTMLInputElement>) => {
-            let val = +value
-
             if (value.length > maxLength) return;
+
+            let val = +value
             if (val < +min) val = +min;
             if (val > +max) val = +max;
 
@@ -45,7 +45,6 @@ export default function Settings() {
                     <label htmlFor='ttl'>Time to live </label>
                     <input id='ttl' className='form-input' type='number'
                         min={5} max={60} maxLength={2}
-                        pattern='^[0-9]{1}$'
                         value={formState.ttl}
                         onChange={inputChangeHandler((val) => ({ ttl: +val }), 'updateTtl')}>
                     </input>
@@ -55,10 +54,18 @@ export default function Settings() {
                     <label htmlFor='size'>History size </label>
                     <input id='size' type='number' className='form-input'
                         min={5} max={60} maxLength={2}
-                        pattern='^[0-9]{1}$'
                         value={formState.size}
                         onChange={inputChangeHandler((val) => ({ size: +val }), 'updateSize')}>
                     </input>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="hotkey">Hotkey</label>
+                    <kbd className='hotkey-container'>
+                        <kbd className='key'>ctrl</kbd>+
+                        <kbd className='key'>super</kbd>+
+                        <kbd className='key'>v</kbd>
+                    </kbd>
                 </div>
             </section>
         </div>
